@@ -13,9 +13,14 @@ export const flamesContent = {
   },
   help: {
     buttonLabel: "Help",
-    title: "How to play",
-    description:
-      "Enter two names, let the game calculate the result, and reveal the FLAMES connection.",
+    dialogTitle: "How to play",
+    steps: [
+      "Enter your name and your partner's name.",
+      "The game removes common letters from both names.",
+      "The remaining count is used to reveal the FLAMES result.",
+      "FLAMES stands for Friends, Love, Affection, Marriage, Enemies, and Siblings.",
+    ],
+    closeButtonLabel: "Close",
   },
   validation: {
     requiredName: "Please enter a name.",
