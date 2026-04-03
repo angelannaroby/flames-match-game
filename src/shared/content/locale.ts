@@ -8,7 +8,7 @@ export const flamesContent = {
   intro: {
     title: "Welcome to FLAMES",
     description:
-      "The classic childhood game, reimagined with a playful modern twist. Ready to see what the names reveal?",
+      "The classic childhood game, reimagined with a playful modern twist. Are you excited to see what the names reveal?",
     buttonLabel: "Let’s go",
   },
   form: {
@@ -34,7 +34,20 @@ export const flamesContent = {
     lettersOnly: "Only letters and spaces are allowed.",
     minimumLength: "Please enter at least 3 letters.",
   },
+  calculating: {
+    title: "Calculating your FLAMES...",
+    subtitle: "Let the names do their magic.",
+  },
   result: {
-    title: "Your result",
+    title: "Your result is",
+    restartButtonLabel: "Try again",
+    labels: {
+      friends: "Friends",
+      love: "Love",
+      affection: "Affection",
+      marriage: "Marriage",
+      enemies: "Enemies",
+      siblings: "Siblings",
+    },
   },
 } as const;

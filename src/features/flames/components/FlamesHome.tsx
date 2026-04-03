@@ -1,22 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { AnimatePresence, motion } from "motion/react";
 
 import { flamesContent } from "../../../shared/content/locale";
-import type { FlamesFormValues, FlamesScreenStage } from "../types/flames.types";
+import { calculateFlamesResult } from "../lib/calculateFlameResult";
+import type {
+  FlamesFormValues,
+  FlamesResultKey,
+  FlamesScreenStage,
+} from "../types/flames.types";
 import {
+  FlamesCalculatingState,
   FlamesEntryCard,
   FlamesHelpButton,
   FlamesHelpDialog,
   FlamesIntroCard,
   FlamesIntroTitle,
+  FlamesResultReveal,
 } from "./index";
 
 const MotionBox = motion.create(Box);
 
 export function FlamesHome() {
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
-  const [screenStage, setScreenStage] = useState<FlamesScreenStage>("introTitle");
+  const [screenStage, setScreenStage] =
+    useState<FlamesScreenStage>("introTitle");
+  const [result, setResult] = useState<FlamesResultKey | null>(null);
+
+  const resultTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const introTimer = window.setTimeout(() => {
@@ -25,6 +36,14 @@ export function FlamesHome() {
 
     return () => {
       window.clearTimeout(introTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (resultTimerRef.current) {
+        window.clearTimeout(resultTimerRef.current);
+      }
     };
   }, []);
 
@@ -41,7 +60,22 @@ export function FlamesHome() {
   };
 
   const handleEntrySubmit = (values: FlamesFormValues) => {
-    console.log("Submitted names:", values);
+    const computedResult = calculateFlamesResult(
+      values.firstPlayerName,
+      values.secondPlayerName,
+    );
+
+    setScreenStage("calculating");
+
+    resultTimerRef.current = window.setTimeout(() => {
+      setResult(computedResult);
+      setScreenStage("result");
+    }, 1600);
+  };
+
+  const handleRestart = () => {
+    setResult(null);
+    setScreenStage("entry");
   };
 
   return (
@@ -91,6 +125,36 @@ export function FlamesHome() {
                 transition={{ duration: 0.45, ease: "easeOut" }}
               >
                 <FlamesEntryCard onSubmit={handleEntrySubmit} />
+              </MotionBox>
+            ) : null}
+
+            {!isHelpDialogOpen && screenStage === "calculating" ? (
+              <MotionBox
+                key="flames-home-calculating"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                <FlamesCalculatingState
+                  title={flamesContent.calculating.title}
+                  subtitle={flamesContent.calculating.subtitle}
+                />
+              </MotionBox>
+            ) : null}
+
+            {!isHelpDialogOpen && screenStage === "result" && result ? (
+              <MotionBox
+                key="flames-home-result"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+              >
+                <FlamesResultReveal
+                  result={result}
+                  onRestart={handleRestart}
+                />
               </MotionBox>
             ) : null}
           </AnimatePresence>
