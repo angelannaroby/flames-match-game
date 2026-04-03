@@ -1,21 +1,32 @@
-import { useMemo, useState } from "react";
-import { Box, Stack, Typography } from "@mui/material";
-import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
+import { AnimatePresence, motion } from "motion/react";
 
 import { flamesContent } from "../../../shared/content/locale";
-import { FlamesHelpButton } from "./FlamesHelpButton";
-import { FlamesHelpDialog } from "./FlamesHelpDialog";
+import type { FlamesFormValues, FlamesScreenStage } from "../types/flames.types";
+import {
+  FlamesEntryCard,
+  FlamesHelpButton,
+  FlamesHelpDialog,
+  FlamesIntroCard,
+  FlamesIntroTitle,
+} from "./index";
 
 const MotionBox = motion.create(Box);
-const MotionTypography = motion.create(Typography);
 
 export function FlamesHome() {
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
+  const [screenStage, setScreenStage] = useState<FlamesScreenStage>("introTitle");
 
-  const titleLetters = useMemo(
-    () => flamesContent.home.title.split(""),
-    [],
-  );
+  useEffect(() => {
+    const introTimer = window.setTimeout(() => {
+      setScreenStage("introCard");
+    }, 2200);
+
+    return () => {
+      window.clearTimeout(introTimer);
+    };
+  }, []);
 
   const openHelpDialog = () => {
     setIsHelpDialogOpen(true);
@@ -25,67 +36,66 @@ export function FlamesHome() {
     setIsHelpDialogOpen(false);
   };
 
+  const showEntryCard = () => {
+    setScreenStage("entry");
+  };
+
+  const handleEntrySubmit = (values: FlamesFormValues) => {
+    console.log("Submitted names:", values);
+  };
+
   return (
     <>
-      <MotionBox
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      <Box
         sx={{
           position: "relative",
           zIndex: 1,
           width: "100%",
-          maxWidth: 720,
-          mx: "auto",
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Stack spacing={3} alignItems="center" textAlign="center">
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: { xs: 0.5, sm: 1 },
-            }}
-          >
-            {titleLetters.map((letter, index) => (
-              <MotionTypography
-                key={`${letter}-${index}`}
-                variant="h1"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: [0, -10, 0] }}
-                transition={{
-                  delay: index * 0.08,
-                  duration: 0.7,
-                  ease: "easeOut",
-                }}
-                sx={{
-                  fontSize: { xs: "3rem", sm: "5rem", md: "6rem" },
-                  lineHeight: 1,
-                  color: "text.primary",
-                  textShadow: "0 0 24px rgba(124, 58, 237, 0.28)",
-                }}
-              >
-                {letter}
-              </MotionTypography>
-            ))}
-          </Box>
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: 720,
+            mx: "auto",
+          }}
+        >
+          <AnimatePresence mode="wait">
+            {!isHelpDialogOpen && screenStage === "introTitle" ? (
+              <FlamesIntroTitle
+                key="flames-home-intro-title"
+                title={flamesContent.home.title}
+              />
+            ) : null}
 
-          <MotionTypography
-            variant="h6"
-            color="text.secondary"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45, duration: 0.6, ease: "easeOut" }}
-            sx={{
-              maxWidth: 520,
-              fontWeight: 400,
-            }}
-          >
-            {flamesContent.home.subtitle}
-          </MotionTypography>
-        </Stack>
-      </MotionBox>
+            {!isHelpDialogOpen && screenStage === "introCard" ? (
+              <FlamesIntroCard
+                key="flames-home-intro-card"
+                title={flamesContent.intro.title}
+                description={flamesContent.intro.description}
+                buttonLabel={flamesContent.intro.buttonLabel}
+                onContinue={showEntryCard}
+              />
+            ) : null}
+
+            {!isHelpDialogOpen && screenStage === "entry" ? (
+              <MotionBox
+                key="flames-home-entry"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+              >
+                <FlamesEntryCard onSubmit={handleEntrySubmit} />
+              </MotionBox>
+            ) : null}
+          </AnimatePresence>
+        </Box>
+      </Box>
 
       <FlamesHelpButton
         label={flamesContent.help.buttonLabel}

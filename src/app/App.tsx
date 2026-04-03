@@ -1,4 +1,4 @@
-import { PageShell } from "../shared/components/PageShell";
+import { PageShell } from "../shared/components";
 import { flamesContent } from "../shared/content/locale";
 import { FlamesHome } from "../features/flames/components/FlamesHome";
 

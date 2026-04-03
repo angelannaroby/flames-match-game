@@ -1,4 +1,4 @@
-export type FlamesScreenStage = "home" | "entry" | "calculating" | "result";
+export type FlamesScreenStage = "introTitle" | "introCard" | "entry" | "calculating" | "result";
 
 export type FlamesFormValues = {
   firstPlayerName: string;

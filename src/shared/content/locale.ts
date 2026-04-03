@@ -4,12 +4,19 @@ export const flamesContent = {
   },
   home: {
     title: "FLAMES",
-    subtitle: "A playful way to reveal your relationship result.",
+  },
+  intro: {
+    title: "Welcome to FLAMES",
+    description:
+      "The classic childhood game, reimagined with a playful modern twist. Ready to see what the names reveal?",
+    buttonLabel: "Let’s go",
   },
   form: {
     firstNameLabel: "Your name",
     secondNameLabel: "Partner name",
     submitButtonLabel: "Let's find out",
+    cardTitle: "Just for fun — don’t take it seriously",
+    cardEmoji: "😉",
   },
   help: {
     buttonLabel: "Help",
@@ -25,6 +32,7 @@ export const flamesContent = {
   validation: {
     requiredName: "Please enter a name.",
     lettersOnly: "Only letters and spaces are allowed.",
+    minimumLength: "Please enter at least 3 letters.",
   },
   result: {
     title: "Your result",
