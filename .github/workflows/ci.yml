@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - "feature/**"
+      - "fix/**"
+      - "chore/**"
+  pull_request:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run lint
+        run: pnpm lint
+
+      - name: Run unit and component tests
+        run: pnpm test:run
+
+      - name: Build app
+        run: pnpm build
+
+      - name: Run Playwright e2e
+        run: pnpm test:e2e

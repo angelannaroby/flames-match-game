@@ -1,4 +1,6 @@
-import type { FlamesResultKey } from "../types/flames.types";
+const isDebugMode =
+  typeof window !== "undefined" &&
+  new URLSearchParams(window.location.search).get("debug") === "1";
 
 export const flamesTokens = {
   layout: {
@@ -12,7 +14,7 @@ export const flamesTokens = {
   },
   animation: {
     introTitleDelayMs: 3000,
-    resultRevealDelayMs: 1600,
+    resultRevealDelayMs: isDebugMode ? 5000 : 1600,
     cardEnterDuration: 0.45,
     cardExitDuration: 0.35,
     spinnerDuration: 1.8,
@@ -49,8 +51,5 @@ export const flamesTokens = {
       glow: "rgba(127, 167, 232, 0.24)",
       imageGlow: "rgba(127, 167, 232, 0.18)",
     },
-  } satisfies Record<
-    FlamesResultKey,
-    { accent: string; glow: string; imageGlow: string }
-  >,
+  },
 } as const;

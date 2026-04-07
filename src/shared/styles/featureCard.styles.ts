@@ -1,7 +1,5 @@
 import type { SxProps, Theme } from "@mui/material";
 
-import { appPalette } from "../theme/palette";
-
 export type FeatureCardVariant = "default" | "glow";
 
 type GetFeatureCardRootStylesParams = {

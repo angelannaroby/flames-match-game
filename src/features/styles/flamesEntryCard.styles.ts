@@ -1,7 +1,5 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import { appPalette } from "../../../shared/theme/palette";
-
 export const flamesEntryCardStyles = {
   form: {
     width: "100%",

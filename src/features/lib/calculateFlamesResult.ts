@@ -23,9 +23,8 @@ export function calculateFlamesResult(
   firstName: string,
   secondName: string,
 ): FlamesResultKey {
-  let count = getRemainingCharacterCount(firstName, secondName);
-
-  let sequence = [...FLAMES_RESULT_SEQUENCE];
+  const count = getRemainingCharacterCount(firstName, secondName);
+  const sequence = [...FLAMES_RESULT_SEQUENCE];
 
   let index = 0;
 

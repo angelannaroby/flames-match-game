@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import { appPalette } from "../../../shared/theme/palette";
+import { appPalette } from "../../shared/theme/palette";
 
 export const flamesHelpDialogStyles = {
   dialogPaper: {
