@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { motion } from "motion/react";
 
+import { appPalette } from "../../shared/theme/palette";
+
 type FlamesIntroTitleProps = {
   title: string;
 };
@@ -10,6 +12,7 @@ const MotionTypography = motion.create(Typography);
 
 export function FlamesIntroTitle({ title }: FlamesIntroTitleProps) {
   const titleLetters = title.split("");
+  const titleGradient = `linear-gradient(90deg, ${appPalette.brand.gradient.join(", ")})`;
 
   return (
     <MotionBox
@@ -34,18 +37,26 @@ export function FlamesIntroTitle({ title }: FlamesIntroTitleProps) {
           <MotionTypography
             key={`${letter}-${index}`}
             variant="h1"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: [0, -10, 0] }}
+            initial={{ opacity: 0, y: 40, backgroundPosition: "0% center" }}
+            animate={{
+              opacity: 1,
+              y: [0, -10, 6, -6, 0],
+              backgroundPosition: ["0% center", "100% center"],
+            }}
             transition={{
-              delay: index * 0.08,
-              duration: 0.7,
-              ease: "easeOut",
+              delay: index * 0.12,
+              duration: 2,
+              ease: "easeInOut",
             }}
             sx={{
-              fontSize: { xs: "3rem", sm: "5rem", md: "6rem" },
+              fontSize: { xs: "3.2rem", sm: "5.5rem", md: "6.5rem" },
               lineHeight: 1,
-              color: "text.primary",
-              textShadow: "0 0 24px rgba(124, 58, 237, 0.28)",
+              fontWeight: 800,
+              background: titleGradient,
+              backgroundSize: "200% auto",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: `0 0 30px ${appPalette.brand.primary}59`,
             }}
           >
             {letter}

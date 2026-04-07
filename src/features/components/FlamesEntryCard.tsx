@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { motion } from "motion/react";
+import type { FormEvent } from "react";
 
-import { FeatureCard } from "../../../shared/components";
-import { flamesContent } from "../../../shared/content/locale";
+import { flamesContent } from "../../shared/content/locale";
 import { normalizePlayerName } from "../lib/normalizePlayerName";
 import { validatePlayerName } from "../lib/validatePlayerName";
+import { flamesEntryCardStyles } from "../styles/flamesEntryCard.styles";
 import type { FlamesFormValues } from "../types/flames.types";
+import { FlamesCardShell } from "./FlamesCardShell";
 
 type FlamesEntryCardProps = {
   onSubmit: (values: FlamesFormValues) => void;
@@ -29,18 +31,15 @@ const initialFormErrors: FlamesFormErrors = {
   secondPlayerName: "",
 };
 
+const validationMessages = {
+  requiredMessage: flamesContent.validation.requiredName,
+  lettersOnlyMessage: flamesContent.validation.lettersOnly,
+  minimumLengthMessage: flamesContent.validation.minimumLength,
+};
+
 export function FlamesEntryCard({ onSubmit }: FlamesEntryCardProps) {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
-
-  const validationMessages = useMemo(
-    () => ({
-      requiredMessage: flamesContent.validation.requiredName,
-      lettersOnlyMessage: flamesContent.validation.lettersOnly,
-      minimumLengthMessage: flamesContent.validation.minimumLength,
-    }),
-    [],
-  );
 
   const getFieldCharacterCount = (value: string) =>
     normalizePlayerName(value).replace(/\s/g, "").length;
@@ -81,7 +80,7 @@ export function FlamesEntryCard({ onSubmit }: FlamesEntryCardProps) {
     return !nextErrors.firstPlayerName && !nextErrors.secondPlayerName;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -95,40 +94,46 @@ export function FlamesEntryCard({ onSubmit }: FlamesEntryCardProps) {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <FeatureCard>
-        <Stack component="form" spacing={3} onSubmit={handleSubmit} noValidate>
-          <Stack spacing={1.5} textAlign="center">
-            <Typography variant="h4" fontWeight={700}>
-              {flamesContent.form.cardTitle}
-            </Typography>
+    <FlamesCardShell>
+      <Stack
+        component="form"
+        spacing={{ xs: 2.5, sm: 3 }}
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{
+          ...flamesEntryCardStyles.form,
+          width: "100%",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Stack
+          spacing={1.5}
+          textAlign="center"
+          sx={flamesEntryCardStyles.header}
+        >
+          <Typography variant="h3" sx={flamesEntryCardStyles.title}>
+            {flamesContent.form.cardTitle}
+          </Typography>
 
-            <MotionBox
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, -8, 8, 0],
-                scale: [1, 1.08, 1],
-              }}
-              transition={{
-                duration: 1.8,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-              sx={{
-                fontSize: "1.8rem",
-                lineHeight: 1,
-              }}
-            >
-              {flamesContent.form.cardEmoji}
-            </MotionBox>
-          </Stack>
+          <MotionBox
+            animate={{
+              y: [0, -8, 0],
+              rotate: [0, -6, 6, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 1.8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
+            sx={flamesEntryCardStyles.emoji}
+          >
+            {flamesContent.form.cardEmoji}
+          </MotionBox>
+        </Stack>
 
+        <Stack spacing={2.5} sx={flamesEntryCardStyles.fieldsStack}>
           <TextField
             label={flamesContent.form.firstNameLabel}
             value={formValues.firstPlayerName}
@@ -138,6 +143,9 @@ export function FlamesEntryCard({ onSubmit }: FlamesEntryCardProps) {
             error={Boolean(formErrors.firstPlayerName)}
             helperText={formErrors.firstPlayerName || " "}
             fullWidth
+            variant="outlined"
+            InputLabelProps={{ shrink: true }}
+            sx={flamesEntryCardStyles.textField}
           />
 
           <TextField
@@ -149,26 +157,28 @@ export function FlamesEntryCard({ onSubmit }: FlamesEntryCardProps) {
             error={Boolean(formErrors.secondPlayerName)}
             helperText={formErrors.secondPlayerName || " "}
             fullWidth
+            variant="outlined"
+            InputLabelProps={{ shrink: true }}
+            sx={flamesEntryCardStyles.textField}
           />
-
-          <Box sx={{ display: "flex", justifyContent: "center", pt: 1 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              size="medium"
-              disabled={isSubmitDisabled}
-              sx={{
-                minWidth: 180,
-                px: 3,
-                py: 1.2,
-                borderRadius: 999,
-              }}
-            >
-              {flamesContent.form.submitButtonLabel}
-            </Button>
-          </Box>
         </Stack>
-      </FeatureCard>
-    </Box>
+
+        <Box sx={flamesEntryCardStyles.buttonContainer}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={isSubmitDisabled}
+            sx={flamesEntryCardStyles.submitButton}
+          >
+            {flamesContent.form.submitButtonLabel}
+          </Button>
+        </Box>
+      </Stack>
+
+      <Box aria-hidden sx={flamesEntryCardStyles.decorativeHeart}>
+        ❤️
+      </Box>
+    </FlamesCardShell>
   );
 }

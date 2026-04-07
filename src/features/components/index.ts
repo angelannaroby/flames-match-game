@@ -6,3 +6,4 @@ export * from "./FlamesIntroCard";
 export * from "./FlamesIntroTitle";
 export * from "./FlamesResultReveal";
 export * from "./FlamesCalculatingState";
+export * from "./FlamesFloatingHearts";

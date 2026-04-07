@@ -1,6 +1,6 @@
+import { FlamesHome } from "../features/components";
 import { PageShell } from "../shared/components";
 import { flamesContent } from "../shared/content/locale";
-import { FlamesHome } from "../features/flames/components/FlamesHome";
 
 export default function App() {
   return (

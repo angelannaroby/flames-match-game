@@ -1,17 +1,13 @@
-import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { AnimatePresence, motion } from "motion/react";
 
-import { flamesContent } from "../../../shared/content/locale";
-import { calculateFlamesResult } from "../lib/calculateFlameResult";
-import type {
-  FlamesFormValues,
-  FlamesResultKey,
-  FlamesScreenStage,
-} from "../types/flames.types";
+import { flamesContent } from "../../shared/content/locale";
+import { flamesTokens } from "../constants/flames.tokens";
+import { useFlamesFlow } from "../hooks/useFlamesFlow";
 import {
   FlamesCalculatingState,
   FlamesEntryCard,
+  FlamesFloatingHearts,
   FlamesHelpButton,
   FlamesHelpDialog,
   FlamesIntroCard,
@@ -22,61 +18,16 @@ import {
 const MotionBox = motion.create(Box);
 
 export function FlamesHome() {
-  const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
-  const [screenStage, setScreenStage] =
-    useState<FlamesScreenStage>("introTitle");
-  const [result, setResult] = useState<FlamesResultKey | null>(null);
-
-  const resultTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const introTimer = window.setTimeout(() => {
-      setScreenStage("introCard");
-    }, 2200);
-
-    return () => {
-      window.clearTimeout(introTimer);
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (resultTimerRef.current) {
-        window.clearTimeout(resultTimerRef.current);
-      }
-    };
-  }, []);
-
-  const openHelpDialog = () => {
-    setIsHelpDialogOpen(true);
-  };
-
-  const closeHelpDialog = () => {
-    setIsHelpDialogOpen(false);
-  };
-
-  const showEntryCard = () => {
-    setScreenStage("entry");
-  };
-
-  const handleEntrySubmit = (values: FlamesFormValues) => {
-    const computedResult = calculateFlamesResult(
-      values.firstPlayerName,
-      values.secondPlayerName,
-    );
-
-    setScreenStage("calculating");
-
-    resultTimerRef.current = window.setTimeout(() => {
-      setResult(computedResult);
-      setScreenStage("result");
-    }, 1600);
-  };
-
-  const handleRestart = () => {
-    setResult(null);
-    setScreenStage("entry");
-  };
+  const {
+    isHelpDialogOpen,
+    screenStage,
+    result,
+    openHelpDialog,
+    closeHelpDialog,
+    showEntryCard,
+    handleEntrySubmit,
+    handleRestart,
+  } = useFlamesFlow();
 
   return (
     <>
@@ -91,10 +42,12 @@ export function FlamesHome() {
           justifyContent: "center",
         }}
       >
+        <FlamesFloatingHearts />
+
         <Box
           sx={{
             width: "100%",
-            maxWidth: 720,
+            maxWidth: flamesTokens.layout.contentMaxWidth,
             mx: "auto",
           }}
         >
@@ -122,7 +75,10 @@ export function FlamesHome() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
+                transition={{
+                  duration: flamesTokens.animation.cardEnterDuration,
+                  ease: "easeOut",
+                }}
               >
                 <FlamesEntryCard onSubmit={handleEntrySubmit} />
               </MotionBox>
@@ -134,7 +90,10 @@ export function FlamesHome() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                transition={{
+                  duration: flamesTokens.animation.cardExitDuration,
+                  ease: "easeOut",
+                }}
               >
                 <FlamesCalculatingState
                   title={flamesContent.calculating.title}
@@ -149,12 +108,12 @@ export function FlamesHome() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
+                transition={{
+                  duration: flamesTokens.animation.cardEnterDuration,
+                  ease: "easeOut",
+                }}
               >
-                <FlamesResultReveal
-                  result={result}
-                  onRestart={handleRestart}
-                />
+                <FlamesResultReveal result={result} onRestart={handleRestart} />
               </MotionBox>
             ) : null}
           </AnimatePresence>
@@ -169,7 +128,6 @@ export function FlamesHome() {
       <FlamesHelpDialog
         open={isHelpDialogOpen}
         title={flamesContent.help.dialogTitle}
-        steps={flamesContent.help.steps}
         closeButtonLabel={flamesContent.help.closeButtonLabel}
         onClose={closeHelpDialog}
       />
