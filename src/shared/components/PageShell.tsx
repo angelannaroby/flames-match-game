@@ -20,8 +20,6 @@ export function PageShell({ ariaLabel, children }: PageShellProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        px: 3,
-        py: 4,
       }}
     >
       {children}
