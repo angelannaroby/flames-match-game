@@ -37,18 +37,37 @@ export const flamesContent = {
     rules: [
       "This is only for fun — don’t take the result too seriously.",
       "Use real names or nicknames, but keep them at least 3 letters long.",
-      "Only letters, spaces, apostrophes, and hyphens are allowed.",
+      "Only letters and spaces are allowed.",
     ],
     closeButtonLabel: "Close",
   },
   validation: {
     requiredName: "Please enter a name.",
-    lettersOnly: "Only letters, spaces, apostrophes, and hyphens are allowed.",
+    lettersOnly: "Only letters, spaces are allowed.",
     minimumLength: "Please enter at least 3 letters.",
   },
   calculating: {
     title: "Calculating your FLAMES...",
-    subtitle: "Let the names do their magic.",
+    subtitle: "",
+    firstNameLabel: "Your name",
+    secondNameLabel: "Partner name",
+    remainingCountLabel: "Letters left",
+    remainingLettersLabel: "Letters that remain",
+    flamesLabel: "F L A M E S",
+    currentCountLabel: "This turn",
+    pinnedCountLabel: "Count",
+    matchingTitle: "Crossing out common letters...",
+    matchingSubtitle: "",
+    countSummaryTitle: "",
+    countSummarySubtitle: "",
+    transitionTitle: "Now let’s count through FLAMES...",
+    transitionSubtitle: "",
+    flamesStartTitle: "Counting through FLAMES",
+    flamesStartSubtitle: "",
+    flamesStrikeTitle: "Counting through FLAMES",
+    flamesStrikeSubtitle: "",
+    finalStepTitle: "Counting through FLAMES",
+    finalStepSubtitle: "",
   },
   result: {
     title: "Your result is",
@@ -64,8 +83,7 @@ export const flamesContent = {
     quotes: {
       friends:
         "A true friend is one of life’s quiet blessings.\nLaugh together, be there for each other, and never take that bond for granted.",
-      love:
-        "Love is not just about finding each other, but choosing each other every day.\nIf this is love… take care of it.",
+      love: "Love is not just about finding each other, but choosing each other every day.\nIf this is love… take care of it.",
       marriage:
         "A lifetime together starts with small moments like this.\nIf this is your story… cherish it, grow with it, and build something beautiful.",
       affection:

@@ -7,8 +7,8 @@ export const flamesTokens = {
     cardMaxWidth: 640,
     contentMaxWidth: 720,
     cardMinHeight: {
-      xs: 420,
-      sm: 500,
+      xs: 440,
+      sm: 540,
     },
     helpButtonOffset: 24,
   },
@@ -19,6 +19,16 @@ export const flamesTokens = {
     cardExitDuration: 0.35,
     spinnerDuration: 1.8,
     titleLetterDuration: 2,
+
+    matchingScanDurationMs: isDebugMode ? 1400 : 700,
+    matchingPairFocusDurationMs: isDebugMode ? 1500 : 780,
+    matchingStrikeDurationMs: isDebugMode ? 1600 : 900,
+    matchingNoMatchDurationMs: isDebugMode ? 1700 : 980,
+    countSummaryDurationMs: isDebugMode ? 2800 : 1900,
+    revealDurationMs: isDebugMode ? 3000 : 2100,
+    flamesCountStepDurationMs: isDebugMode ? 1200 : 760,
+    flamesEliminationDurationMs: isDebugMode ? 1300 : 860,
+    finalPauseMs: isDebugMode ? 1400 : 950,
   },
   resultPalette: {
     friends: {

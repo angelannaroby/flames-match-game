@@ -22,10 +22,12 @@ export function FlamesHome() {
     isHelpDialogOpen,
     screenStage,
     result,
+    calculationSteps,
     openHelpDialog,
     closeHelpDialog,
     showEntryCard,
     handleEntrySubmit,
+    handleCalculationComplete,
     handleRestart,
   } = useFlamesFlow();
 
@@ -96,8 +98,8 @@ export function FlamesHome() {
                 }}
               >
                 <FlamesCalculatingState
-                  title={flamesContent.calculating.title}
-                  subtitle={flamesContent.calculating.subtitle}
+                  steps={calculationSteps}
+                  onComplete={handleCalculationComplete}
                 />
               </MotionBox>
             ) : null}
