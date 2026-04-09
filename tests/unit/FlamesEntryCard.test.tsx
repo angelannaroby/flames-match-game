@@ -1,17 +1,23 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 
 import { FlamesEntryCard } from "../../src/features/components";
+import { flamesContent } from "../../src/shared/content/locale";
 import { renderWithProviders } from "../../src/test/test-utils";
 
 describe("FlamesEntryCard", () => {
   it("renders form fields and submit button", () => {
     renderWithProviders(<FlamesEntryCard onSubmit={vi.fn()} />);
 
-    expect(screen.getByLabelText("Your name")).toBeInTheDocument();
-    expect(screen.getByLabelText("Partner name")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Let's find out" }),
+      screen.getByLabelText(flamesContent.form.firstNameLabel),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(flamesContent.form.secondNameLabel),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: flamesContent.form.submitButtonLabel }),
     ).toBeInTheDocument();
   });
 
@@ -19,7 +25,7 @@ describe("FlamesEntryCard", () => {
     renderWithProviders(<FlamesEntryCard onSubmit={vi.fn()} />);
 
     expect(
-      screen.getByRole("button", { name: "Let's find out" }),
+      screen.getByRole("button", { name: flamesContent.form.submitButtonLabel }),
     ).toBeDisabled();
   });
 
@@ -28,11 +34,17 @@ describe("FlamesEntryCard", () => {
 
     renderWithProviders(<FlamesEntryCard onSubmit={vi.fn()} />);
 
-    await user.type(screen.getByLabelText("Your name"), "Anna");
-    await user.type(screen.getByLabelText("Partner name"), "Raj");
+    await user.type(
+      screen.getByLabelText(flamesContent.form.firstNameLabel),
+      "Anna",
+    );
+    await user.type(
+      screen.getByLabelText(flamesContent.form.secondNameLabel),
+      "Raj",
+    );
 
     expect(
-      screen.getByRole("button", { name: "Let's find out" }),
+      screen.getByRole("button", { name: flamesContent.form.submitButtonLabel }),
     ).toBeEnabled();
   });
 
@@ -41,15 +53,21 @@ describe("FlamesEntryCard", () => {
 
     renderWithProviders(<FlamesEntryCard onSubmit={vi.fn()} />);
 
-    await user.type(screen.getByLabelText("Your name"), "Ann");
-    await user.type(screen.getByLabelText("Partner name"), "R@j");
+    await user.type(
+      screen.getByLabelText(flamesContent.form.firstNameLabel),
+      "Ann",
+    );
+    await user.type(
+      screen.getByLabelText(flamesContent.form.secondNameLabel),
+      "R@j",
+    );
 
-    await user.click(screen.getByRole("button", { name: "Let's find out" }));
+    await user.click(
+      screen.getByRole("button", { name: flamesContent.form.submitButtonLabel }),
+    );
 
     expect(
-      screen.getByText(
-        "Only letters, spaces, apostrophes, and hyphens are allowed.",
-      ),
+      screen.getByText(flamesContent.validation.lettersOnly),
     ).toBeInTheDocument();
   });
 
@@ -59,10 +77,18 @@ describe("FlamesEntryCard", () => {
 
     renderWithProviders(<FlamesEntryCard onSubmit={onSubmit} />);
 
-    await user.type(screen.getByLabelText("Your name"), "  Anna   Maria ");
-    await user.type(screen.getByLabelText("Partner name"), "  Raj  ");
+    await user.type(
+      screen.getByLabelText(flamesContent.form.firstNameLabel),
+      "  Anna   Maria ",
+    );
+    await user.type(
+      screen.getByLabelText(flamesContent.form.secondNameLabel),
+      "  Raj  ",
+    );
 
-    await user.click(screen.getByRole("button", { name: "Let's find out" }));
+    await user.click(
+      screen.getByRole("button", { name: flamesContent.form.submitButtonLabel }),
+    );
 
     expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onSubmit).toHaveBeenCalledWith({
@@ -76,26 +102,26 @@ describe("FlamesEntryCard", () => {
 
     renderWithProviders(<FlamesEntryCard onSubmit={vi.fn()} />);
 
-    const firstNameInput = screen.getByLabelText("Your name");
-    const partnerNameInput = screen.getByLabelText("Partner name");
+    const firstNameInput = screen.getByLabelText(flamesContent.form.firstNameLabel);
+    const partnerNameInput = screen.getByLabelText(
+      flamesContent.form.secondNameLabel,
+    );
 
     await user.type(firstNameInput, "An@");
     await user.type(partnerNameInput, "Raj");
-    await user.click(screen.getByRole("button", { name: "Let's find out" }));
+    await user.click(
+      screen.getByRole("button", { name: flamesContent.form.submitButtonLabel }),
+    );
 
     expect(
-      screen.getByText(
-        "Only letters, spaces, apostrophes, and hyphens are allowed.",
-      ),
+      screen.getByText(flamesContent.validation.lettersOnly),
     ).toBeInTheDocument();
 
     await user.clear(firstNameInput);
     await user.type(firstNameInput, "Anna");
 
     expect(
-      screen.queryByText(
-        "Only letters, spaces, apostrophes, and hyphens are allowed.",
-      ),
+      screen.queryByText(flamesContent.validation.lettersOnly),
     ).not.toBeInTheDocument();
   });
 });

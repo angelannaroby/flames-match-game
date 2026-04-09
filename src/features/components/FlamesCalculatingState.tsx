@@ -29,7 +29,6 @@ function LetterChip({
   const isRemoved = letter.state === "removed";
 
   const getSx = () => {
-
     if (variant === "flames") {
       return flamesCalculatingStateStyles.flamesLetterChip(letter.state);
     }
@@ -170,11 +169,7 @@ function FlamesLetterRow({ letters }: { letters: FlamesVisualLetter[] }) {
   );
 }
 
-function MatchingStage({
-  step,
-}: {
-  step: FlamesVisualStep;
-}) {
+function MatchingStage({ step }: { step: FlamesVisualStep }) {
   return (
     <Stack
       spacing={1.5}
@@ -200,7 +195,7 @@ function MatchingStage({
 
       <StatusPill message={step.message} />
 
-      <Stack spacing={1.} sx={{ width: "100%" }}>
+      <Stack spacing={1} sx={{ width: "100%" }}>
         <NameLetterRow
           label={flamesContent.calculating.firstNameLabel}
           letters={step.firstNameLetters}
@@ -334,7 +329,6 @@ export function FlamesCalculatingState({
   onComplete,
 }: FlamesCalculatingStateProps) {
   const [stepIndex, setStepIndex] = useState(0);
-  const [isRevealVisible, setIsRevealVisible] = useState(false);
 
   const safeSteps = useMemo(() => steps ?? [], [steps]);
   const currentStep = safeSteps[stepIndex];
@@ -350,27 +344,11 @@ export function FlamesCalculatingState({
     currentStep?.phase === "flamesEliminated" ||
     currentStep?.phase === "final";
 
-  useEffect(() => {
-    setStepIndex(0);
-    setIsRevealVisible(false);
-  }, [safeSteps]);
+  const isRevealVisible = currentStep?.phase === "transitionToFlames";
 
   useEffect(() => {
     if (!currentStep || safeSteps.length === 0) {
       return;
-    }
-
-    if (currentStep.phase === "transitionToFlames") {
-      setIsRevealVisible(true);
-
-      const timer = window.setTimeout(() => {
-        setIsRevealVisible(false);
-        setStepIndex((previousStepIndex) => previousStepIndex + 1);
-      }, currentStep.stepDurationMs);
-
-      return () => {
-        window.clearTimeout(timer);
-      };
     }
 
     if (stepIndex >= safeSteps.length - 1) {
