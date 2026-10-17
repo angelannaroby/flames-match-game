@@ -2,7 +2,7 @@
 
 A small, nostalgic project built over the Easter weekend — bringing the classic pen-and-paper FLAMES game into a modern, polished web experience.
 
-👉 **Live Demo:** https://play-flames.vercel.app/
+👉 **Live Demo:** https://flamesplay.vercel.app/
 
 
 ## ✨ About
